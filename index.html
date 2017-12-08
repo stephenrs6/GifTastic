@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>GifTastic</title>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u"
+        crossorigin="anonymous">
+    <!-- <link rel="stylesheet" type="text/css" href="style.css"> -->
+
+</head>
+
+<body>
+    <div class="btn-group" role="group" aria-label="...">
+        <button type="button" class="btn btn-default gif" data-animal="dog">Dog</button>
+        <button type="button" class="btn btn-default gif" data-animal="cat">Cat</button>
+        <button type="button" class="btn btn-default gif" data-animal="rabbit">Rabbit</button>
+        <button type="button" class="btn btn-default gif" data-animal="hamster">Hamster</button>
+        <button type="button" class="btn btn-default gif" data-animal="bird">Bird</button>
+        <button type="button" class="btn btn-default gif" data-animal="skunk">Skunk</button>
+
+
+
+    </div>
+    <div id="container"></div>
+    <div id="sidebar"></div>
+
+
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+    <script type="text/javascript">
+
+        $("button").on("click", function () {
+            var animal = $(this).attr("data-animal");
+            var queryURL = "https://api.giphy.com/v1/gifs/search?q=" +
+                animal + "&api_key=dc6zaTOxFJmzC&limit=10";+
+
+            $.ajax({
+                url: queryURL,
+                method: "GET"
+            }).done(function (response){
+                console.log(response);
+            var container = $("#container");
+            container.empty();
+            for(var i = 0; i < response.data.length; i++) {
+            var img = $('<img>');
+            var rating = $('<p>')
+            var results = response.data
+            console.log(results);
+                    rating.text("Rating: " + results[i].rating);
+                    img.attr("src", results[i].images.fixed_height_small.url);
+            container.append(rating);
+            container.append(img);
+             }       
+
+
+              
+            });
+        }); 
+                
+            //     $("#movies-view").text(JSON.stringify(response));
+            //     renderButtons();
+            // });
+
+            // $(".gif").on("click", function () {
+            // }
+    </script>
+</body>
+
+</html>
+
+
+<!-- 1. make a giphy login accnt, get API key -->
+<!-- 2. Make Buttons -->
+<!-- 3. Make form to add new Buttons -->
+<!-- 4. Make Variables/Array -->
+<!-- 5. create an ajax call to get GIFs -->
+<!-- 6. Dissect the obj (title, ratings, img)-->
+<!-- 7. Display the images to user -->
+<!-- 8. onclick animate GIFs -->
+<!-- 9. onclick again, stop animate GIFs -->
+<!--  -->
