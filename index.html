@@ -13,7 +13,7 @@
 </head>
 
 <body>
-    <div class="btn-group" role="group" aria-label="...">
+    <div class="btn-group col-lg-12" id="buttons" role="group" aria-label="...">
         <button type="button" class="btn btn-default gif" data-animal="dog">Dog</button>
         <button type="button" class="btn btn-default gif" data-animal="cat">Cat</button>
         <button type="button" class="btn btn-default gif" data-animal="rabbit">Rabbit</button>
@@ -24,48 +24,94 @@
 
 
     </div>
-    <div id="container"></div>
-    <div id="sidebar"></div>
+    <div id="container" class="col-lg-8"></div>
+    <div id="panel" class="col-lg-4">
+        <form id="animal-form">
+            <label for="animal-input">Add an animal!</label>
+            <br>
+            <input type="text" id="animal-input">
+            <br>
+            <br>
+            <input id="user-input" type="submit" value="Submit">
+        </form>
+    </div>
 
 
 
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
     <script type="text/javascript">
 
-        $("button").on("click", function () {
+        $(document).on('click', 'button', function () {
             var animal = $(this).attr("data-animal");
             var queryURL = "https://api.giphy.com/v1/gifs/search?q=" +
-                animal + "&api_key=dc6zaTOxFJmzC&limit=10";+
+                animal + "&api_key=dc6zaTOxFJmzC&limit=10"; +
 
-            $.ajax({
-                url: queryURL,
-                method: "GET"
-            }).done(function (response){
-                console.log(response);
-            var container = $("#container");
-            container.empty();
-            for(var i = 0; i < response.data.length; i++) {
-            var img = $('<img>');
-            var rating = $('<p>')
-            var results = response.data
-            console.log(results);
-                    rating.text("Rating: " + results[i].rating);
-                    img.attr("src", results[i].images.fixed_height_small.url);
-            container.append(rating);
-            container.append(img);
-             }       
+                    $.ajax({
+                        url: queryURL,
+                        method: "GET"
+                    }).done(function (response) {
+                        console.log(response);
+                        var container = $("#container");
+                        container.empty();
+                        for (var i = 0; i < response.data.length; i++) {
+                            var img = $('<img>');
+                            var rating = $('<p>');
+                            var results = response.data;
+                            console.log(results);
+                            rating.text("Rating: " + results[i].rating);
+                            img.attr("animated", results[i].images.fixed_height_small.url);
+                            img.attr("still", results[i].images.fixed_height_small_still.url);
+                            img.attr("src", results[i].images.fixed_height_small_still.url);
+                            img.attr("state", "still");
+                            img.addClass("gif");
+                            container.append(rating);
+                            container.append(img);
+                        }
 
 
-              
-            });
-        }); 
-                
-            //     $("#movies-view").text(JSON.stringify(response));
-            //     renderButtons();
-            // });
+                    });
+        });
 
-            // $(".gif").on("click", function () {
-            // }
+        $("#user-input").on("click", function (event) {
+            event.preventDefault();
+            var newAnimal = $("#animal-input").val().trim();
+            var animals = $("<button>");
+            var container = $("#buttons");
+            animals.attr("type", "button");
+            animals.addClass("btn btn-default gif");
+
+
+            animals.attr("data-animal", newAnimal);
+
+            animals.text(newAnimal);
+            console.log(newAnimal);
+
+            container.append(animals);
+            console.log(animals);
+
+
+        });
+        $(document).on("click", ".gif", function () {
+            var state = $(this).attr("state");
+            console.log(state);
+
+            if (state === "still") {
+                var imgAnimate = $(this).attr("animated");
+                $(this).attr("src", imgAnimate);
+                $(this).attr("state", "animated");
+            }
+            else {
+                var imgStill = $(this).attr("still");
+                $(this).attr("src", imgStill);
+                $(this).attr("state", "still");
+            }
+
+        }
+            // ==============================================
+
+            // STEP FOUR: open the file in the browser and click on the images.
+            // Then click again to pause.
+        );
     </script>
 </body>
 
